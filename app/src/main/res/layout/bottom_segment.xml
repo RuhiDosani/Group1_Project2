@@ -1,17 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="#B4E3B6">
+    android:layout_height="fill_parent"
+    >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical">
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#B4E3B6">
 
-    <!-- Turning Wheel -->
-    <ImageView
-        android:id="@+id/wheel_image"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_gravity="center"
-        android:src="@drawable/wheeloftime" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                >
 
-    <!-- Date/Time Display -->
+                <!-- Turning Wheel -->
+                <ImageView
+                    android:id="@+id/wheel_image"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:src="@drawable/wheeloftime" />
+
+                <!-- Date/Time Display -->
+                <TextClock
+                    android:id="@+id/txtDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="date"
+                    android:format12Hour="dd-MMM-yyyy hh:mm:ss"
+                    android:textSize="18sp" />
+            </LinearLayout>
+        </FrameLayout>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="300sp"
+            android:src="@drawable/spring"
+            android:scaleType="fitXY"
+        />
+    </LinearLayout>
+
 
 </FrameLayout>
+
+
+
+
