@@ -22,20 +22,24 @@
                 >
 
                 <!-- Turning Wheel -->
-                <ImageView
-                    android:id="@+id/wheel_image"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:src="@drawable/wheeloftime" />
 
                 <!-- Date/Time Display -->
+
                 <TextClock
                     android:id="@+id/txtDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="date"
+                    android:layout_margin="10sp"
                     android:format12Hour="dd-MMM-yyyy hh:mm:ss"
+                    android:text="date"
                     android:textSize="18sp" />
+
+                <ImageView
+                    android:id="@+id/wheel_image"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:layout_margin="10sp"
+                    android:src="@drawable/wheeloftime" />
             </LinearLayout>
         </FrameLayout>
         <ImageView

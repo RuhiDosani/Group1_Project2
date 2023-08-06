@@ -2,6 +2,7 @@ package com.example.group1_project2
 
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
+import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
@@ -16,6 +17,7 @@ import androidx.vectordrawable.graphics.drawable.ArgbEvaluator
 class TopFragment : Fragment(R.layout.top_segment) {
     private var animView : View? = null
     private var ANIMATION_DURATION = 2000
+    @SuppressLint("ObjectAnimatorBinding", "RestrictedApi")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
