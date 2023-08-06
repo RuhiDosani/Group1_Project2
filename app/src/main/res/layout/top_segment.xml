@@ -5,6 +5,7 @@
     android:layout_height="wrap_content"
     android:background="#399C27B0"
     android:gravity="center"
+    android:id="@+id/topBackground"
     android:orientation="vertical">
 
     <LinearLayout
