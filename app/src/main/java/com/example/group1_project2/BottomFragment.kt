@@ -14,8 +14,12 @@ import androidx.fragment.app.FragmentActivity
 import androidx.vectordrawable.graphics.drawable.ArgbEvaluator
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import android.media.MediaPlayer
 
 class BottomFragment: Fragment(R.layout.bottom_segment) {
+
+    var mMediaPlayer: MediaPlayer? = null
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -45,12 +49,14 @@ class BottomFragment: Fragment(R.layout.bottom_segment) {
          colorAnim.setEvaluator(ArgbEvaluator())
          colorAnim.start()
      }.withStartAction {
+         mMediaPlayer = MediaPlayer.create(requireContext(), R.raw.spring_song)
+         mMediaPlayer!!.start()
          image.setImageResource(R.drawable.spring)
          image.startAnimation(AnimationUtils.loadAnimation(requireContext(), R.anim.fade_in))
 
      }.withEndAction {
+         mMediaPlayer!!.stop()
          image.startAnimation(AnimationUtils.loadAnimation(requireContext(), R.anim.fade_out))
-
          summerTime(image,bg)
      }.start()
 
@@ -72,10 +78,13 @@ class BottomFragment: Fragment(R.layout.bottom_segment) {
             colorAnim.setEvaluator(ArgbEvaluator())
             colorAnim.start()
         }.withStartAction {
+            mMediaPlayer = MediaPlayer.create(requireContext(), R.raw.summer_song)
+            mMediaPlayer!!.start()
             image.setImageResource(R.drawable.summer)
             image.startAnimation(AnimationUtils.loadAnimation(requireContext(), R.anim.fade_in))
 
         }.withEndAction {
+            mMediaPlayer!!.stop()
             image.startAnimation(AnimationUtils.loadAnimation(requireContext(), R.anim.fade_out))
 
             autumnTime(image,bg)
@@ -97,10 +106,13 @@ class BottomFragment: Fragment(R.layout.bottom_segment) {
             colorAnim.setEvaluator(ArgbEvaluator())
             colorAnim.start()
         }.withStartAction {
+            mMediaPlayer = MediaPlayer.create(requireContext(), R.raw.autumn_song)
+            mMediaPlayer!!.start()
             image.setImageResource(R.drawable.autumn)
             image.startAnimation(AnimationUtils.loadAnimation(requireContext(), R.anim.fade_in))
 
         }.withEndAction {
+            mMediaPlayer!!.stop()
             image.startAnimation(AnimationUtils.loadAnimation(requireContext(), R.anim.fade_out))
 
             winterTime(image,bg)
@@ -122,10 +134,13 @@ class BottomFragment: Fragment(R.layout.bottom_segment) {
             colorAnim.setEvaluator(ArgbEvaluator())
             colorAnim.start()
         }.withStartAction {
+            mMediaPlayer = MediaPlayer.create(requireContext(), R.raw.winter_song)
+            mMediaPlayer!!.start()
             image.setImageResource(R.drawable.winter)
             image.startAnimation(AnimationUtils.loadAnimation(requireContext(), R.anim.fade_in))
 
         }.withEndAction {
+            mMediaPlayer!!.stop()
             image.startAnimation(AnimationUtils.loadAnimation(requireContext(), R.anim.fade_out))
 
             springTime(image,bg)
