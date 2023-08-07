@@ -53,7 +53,6 @@ class BottomFragment: Fragment(R.layout.bottom_segment) {
      }.withStartAction {
          mediaPlayer = MediaPlayer.create(requireContext(), R.raw.spring_song)
          mediaPlayer.start()
-//         mediaPlayer.start()
 
          image.setImageResource(R.drawable.spring)
          image.startAnimation(AnimationUtils.loadAnimation(requireContext(), R.anim.fade_in))
