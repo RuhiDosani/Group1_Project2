@@ -35,7 +35,7 @@ class BottomFragment: Fragment(R.layout.bottom_segment) {
     }
 
 
- @SuppressLint("RestrictedApi")
+ @SuppressLint("RestrictedApi", "WrongConstant")
  private fun springTime(image: ImageView, bg: View)
  {
      image.animate().apply {
@@ -68,7 +68,7 @@ class BottomFragment: Fragment(R.layout.bottom_segment) {
 
  }
 
-    @SuppressLint("RestrictedApi")
+    @SuppressLint("RestrictedApi", "WrongConstant")
     private fun summerTime(image: ImageView, bg: View)
     {
         image.animate().apply {
@@ -99,7 +99,7 @@ class BottomFragment: Fragment(R.layout.bottom_segment) {
         }.start()
     }
 
-    @SuppressLint("RestrictedApi")
+    @SuppressLint("RestrictedApi", "WrongConstant")
     private fun autumnTime(image: ImageView, bg: View)
     {
         image.animate().apply {
@@ -129,7 +129,7 @@ class BottomFragment: Fragment(R.layout.bottom_segment) {
         }.start()
     }
 
-    @SuppressLint("RestrictedApi")
+    @SuppressLint("RestrictedApi", "WrongConstant")
     private fun winterTime(image: ImageView, bg: View)
     {
         image.animate().apply {
