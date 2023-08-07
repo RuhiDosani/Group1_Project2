@@ -1,26 +1,57 @@
 package com.example.group1_project2
 
+import android.animation.Animator
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
-import android.view.FrameMetrics.ANIMATION_DURATION
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
-import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import androidx.vectordrawable.graphics.drawable.ArgbEvaluator
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import android.media.MediaPlayer
 import android.util.Log
 
-
-class BottomFragment: Fragment(R.layout.bottom_segment) {
+class BottomFragment : Fragment(R.layout.bottom_segment) {
     private lateinit var mediaPlayer: MediaPlayer
+    private lateinit var currentAnimator: ValueAnimator
+    private var currentSeasonIndex = 0
+
+    private data class Season(
+        val imageRes: Int,
+        val songRes: Int,
+        val startColor: Int,
+        val endColor: Int
+    )
+
+    private val seasons = listOf(
+        Season(
+            R.drawable.spring,
+            R.raw.spring_song,
+            Color.parseColor("#FF4500"),
+            Color.parseColor("#8FBC8F")
+        ),
+        Season(
+            R.drawable.summer,
+            R.raw.summer_song,
+            Color.parseColor("#8FBC8F"),
+            Color.parseColor("#FFFF00")
+        ),
+        Season(
+            R.drawable.autumn,
+            R.raw.autumn_song,
+            Color.parseColor("#FFFF00"),
+            Color.parseColor("#FFFFFF")
+        ),
+        Season(
+            R.drawable.winter,
+            R.raw.winter_song,
+            Color.parseColor("#FFFFFF"),
+            Color.parseColor("#FF4500")
+        )
+    )
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -32,134 +63,46 @@ class BottomFragment: Fragment(R.layout.bottom_segment) {
         val animImg2 = AnimationUtils.loadAnimation(requireContext(), R.anim.rotate)
         wheelImageView.startAnimation(animImg2)
 
-        springTime(imageWeather, bottomBackground)
+        startSeasonAnimation(imageWeather, bottomBackground)
     }
 
     fun updateStatus(status: Boolean) {
-        Log.d("STATUS",status.toString())
-    }
-
-
- @SuppressLint("RestrictedApi", "WrongConstant")
- private fun springTime(image: ImageView, bg: View)
- {
-     image.animate().apply {
-         duration = 15000
-         val colorAnim: ValueAnimator = ObjectAnimator.ofInt(
-             bg, "backgroundColor",
-             Color.parseColor("#FF4500"), //MediumVioletRed
-             Color.parseColor("#8FBC8F"), //MediumVioletRed
-         )
-         colorAnim.duration = 15000
-         colorAnim.repeatCount = ValueAnimator.INFINITE
-         colorAnim.repeatMode = ValueAnimator.INFINITE
-         colorAnim.setEvaluator(ArgbEvaluator())
-         colorAnim.start()
-     }.withStartAction {
-         mediaPlayer = MediaPlayer.create(requireContext(), R.raw.spring_song)
-         mediaPlayer.start()
-
-         image.setImageResource(R.drawable.spring)
-         image.startAnimation(AnimationUtils.loadAnimation(requireContext(), R.anim.fade_in))
-
-     }.withEndAction {
-         image.startAnimation(AnimationUtils.loadAnimation(requireContext(), R.anim.fade_out))
-         mediaPlayer.stop()
-
-         summerTime(image,bg)
-     }.start()
-
-
- }
-
-    @SuppressLint("RestrictedApi", "WrongConstant")
-    private fun summerTime(image: ImageView, bg: View)
-    {
-        image.animate().apply {
-            duration = 15000
-            val colorAnim: ValueAnimator = ObjectAnimator.ofInt(
-                bg, "backgroundColor",
-                Color.parseColor("#8FBC8F"), //MediumVioletRed
-                Color.parseColor("#FFFF00"), //MediumVioletRed
-            )
-            colorAnim.duration = 15000
-            colorAnim.repeatCount = ValueAnimator.INFINITE
-            colorAnim.repeatMode = ValueAnimator.INFINITE
-            colorAnim.setEvaluator(ArgbEvaluator())
-            colorAnim.start()
-        }.withStartAction {
-            mediaPlayer = MediaPlayer.create(requireContext(), R.raw.summer_song)
-            mediaPlayer.start()
-            image.setImageResource(R.drawable.summer)
-            image.startAnimation(AnimationUtils.loadAnimation(requireContext(), R.anim.fade_in))
-
-        }.withEndAction {
-            mediaPlayer.stop()
-
-
-            image.startAnimation(AnimationUtils.loadAnimation(requireContext(), R.anim.fade_out))
-
-            autumnTime(image,bg)
-        }.start()
+        if (status) {
+            currentAnimator.start()
+        } else {
+            currentAnimator.pause()
+        }
     }
 
     @SuppressLint("RestrictedApi", "WrongConstant")
-    private fun autumnTime(image: ImageView, bg: View)
-    {
-        image.animate().apply {
+    private fun startSeasonAnimation(image: ImageView, bg: View) {
+        val currentSeason = seasons[currentSeasonIndex]
+        currentAnimator = ObjectAnimator.ofInt(
+            bg, "backgroundColor", currentSeason.startColor, currentSeason.endColor
+        ).apply {
             duration = 15000
-            val colorAnim: ValueAnimator = ObjectAnimator.ofInt(
-                bg, "backgroundColor",
-                Color.parseColor("#FFFF00"), //MediumVioletRed
-                Color.parseColor("#FFFFFF"), //MediumVioletRed
-            )
-            colorAnim.duration = 15000
-            colorAnim.repeatCount = ValueAnimator.INFINITE
-            colorAnim.repeatMode = ValueAnimator.INFINITE
-            colorAnim.setEvaluator(ArgbEvaluator())
-            colorAnim.start()
-        }.withStartAction {
-            mediaPlayer = MediaPlayer.create(requireContext(), R.raw.autumn_song)
-            mediaPlayer.start()
-            image.setImageResource(R.drawable.autumn)
-            image.startAnimation(AnimationUtils.loadAnimation(requireContext(), R.anim.fade_in))
+            repeatCount = ValueAnimator.INFINITE
+            repeatMode = ValueAnimator.REVERSE
+            setEvaluator(ArgbEvaluator())
+            addUpdateListener {
+                bg.setBackgroundColor(it.animatedValue as Int)
+            }
+            start()
+        }
 
-        }.withEndAction {
-            mediaPlayer.stop()
+        mediaPlayer = MediaPlayer.create(requireContext(), currentSeason.songRes)
+        mediaPlayer.start()
+        image.setImageResource(currentSeason.imageRes)
+        image.startAnimation(AnimationUtils.loadAnimation(requireContext(), R.anim.fade_in))
 
-            image.startAnimation(AnimationUtils.loadAnimation(requireContext(), R.anim.fade_out))
+        currentAnimator.addPauseListener(object : Animator.AnimatorPauseListener {
+            override fun onAnimationPause(animation: Animator) {
+                mediaPlayer.pause()
+            }
 
-            winterTime(image,bg)
-        }.start()
-    }
-
-    @SuppressLint("RestrictedApi", "WrongConstant")
-    private fun winterTime(image: ImageView, bg: View)
-    {
-        image.animate().apply {
-            duration = 15000
-            val colorAnim: ValueAnimator = ObjectAnimator.ofInt(
-                bg, "backgroundColor",
-                Color.parseColor("#FFFFFF"), //MediumVioletRed
-                Color.parseColor("#FF4500"), //MediumVioletRed
-            )
-            colorAnim.duration = 15000
-            colorAnim.repeatCount = ValueAnimator.INFINITE
-            colorAnim.repeatMode = ValueAnimator.INFINITE
-            colorAnim.setEvaluator(ArgbEvaluator())
-            colorAnim.start()
-        }.withStartAction {
-            mediaPlayer = MediaPlayer.create(requireContext(), R.raw.winter_song)
-            mediaPlayer.start()
-            image.setImageResource(R.drawable.winter)
-            image.startAnimation(AnimationUtils.loadAnimation(requireContext(), R.anim.fade_in))
-
-        }.withEndAction {
-            mediaPlayer.stop()
-
-            image.startAnimation(AnimationUtils.loadAnimation(requireContext(), R.anim.fade_out))
-
-            springTime(image,bg)
-        }.start()
+            override fun onAnimationResume(animation: Animator) {
+                mediaPlayer.start()
+            }
+        })
     }
 }

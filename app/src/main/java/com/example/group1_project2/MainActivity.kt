@@ -2,8 +2,6 @@ package com.example.group1_project2
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.widget.Button
 import androidx.fragment.app.Fragment
 
 class MainActivity : AppCompatActivity(), TopFragment.ButtoClickedListener {
