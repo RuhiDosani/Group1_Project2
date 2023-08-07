@@ -2,6 +2,7 @@ package com.example.group1_project2
 
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
+import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
 import android.view.FrameMetrics.ANIMATION_DURATION
@@ -14,8 +15,12 @@ import androidx.fragment.app.FragmentActivity
 import androidx.vectordrawable.graphics.drawable.ArgbEvaluator
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import android.media.MediaPlayer
+
 
 class BottomFragment: Fragment(R.layout.bottom_segment) {
+    private lateinit var mediaPlayer: MediaPlayer
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -30,6 +35,7 @@ class BottomFragment: Fragment(R.layout.bottom_segment) {
     }
 
 
+ @SuppressLint("RestrictedApi")
  private fun springTime(image: ImageView, bg: View)
  {
      image.animate().apply {
@@ -45,11 +51,16 @@ class BottomFragment: Fragment(R.layout.bottom_segment) {
          colorAnim.setEvaluator(ArgbEvaluator())
          colorAnim.start()
      }.withStartAction {
+         mediaPlayer = MediaPlayer.create(requireContext(), R.raw.spring_song)
+         mediaPlayer.start()
+//         mediaPlayer.start()
+
          image.setImageResource(R.drawable.spring)
          image.startAnimation(AnimationUtils.loadAnimation(requireContext(), R.anim.fade_in))
 
      }.withEndAction {
          image.startAnimation(AnimationUtils.loadAnimation(requireContext(), R.anim.fade_out))
+         mediaPlayer.stop()
 
          summerTime(image,bg)
      }.start()
@@ -57,6 +68,7 @@ class BottomFragment: Fragment(R.layout.bottom_segment) {
 
  }
 
+    @SuppressLint("RestrictedApi")
     private fun summerTime(image: ImageView, bg: View)
     {
         image.animate().apply {
@@ -72,16 +84,22 @@ class BottomFragment: Fragment(R.layout.bottom_segment) {
             colorAnim.setEvaluator(ArgbEvaluator())
             colorAnim.start()
         }.withStartAction {
+            mediaPlayer = MediaPlayer.create(requireContext(), R.raw.summer_song)
+            mediaPlayer.start()
             image.setImageResource(R.drawable.summer)
             image.startAnimation(AnimationUtils.loadAnimation(requireContext(), R.anim.fade_in))
 
         }.withEndAction {
+            mediaPlayer.stop()
+
+
             image.startAnimation(AnimationUtils.loadAnimation(requireContext(), R.anim.fade_out))
 
             autumnTime(image,bg)
         }.start()
     }
 
+    @SuppressLint("RestrictedApi")
     private fun autumnTime(image: ImageView, bg: View)
     {
         image.animate().apply {
@@ -97,16 +115,21 @@ class BottomFragment: Fragment(R.layout.bottom_segment) {
             colorAnim.setEvaluator(ArgbEvaluator())
             colorAnim.start()
         }.withStartAction {
+            mediaPlayer = MediaPlayer.create(requireContext(), R.raw.autumn_song)
+            mediaPlayer.start()
             image.setImageResource(R.drawable.autumn)
             image.startAnimation(AnimationUtils.loadAnimation(requireContext(), R.anim.fade_in))
 
         }.withEndAction {
+            mediaPlayer.stop()
+
             image.startAnimation(AnimationUtils.loadAnimation(requireContext(), R.anim.fade_out))
 
             winterTime(image,bg)
         }.start()
     }
 
+    @SuppressLint("RestrictedApi")
     private fun winterTime(image: ImageView, bg: View)
     {
         image.animate().apply {
@@ -122,10 +145,14 @@ class BottomFragment: Fragment(R.layout.bottom_segment) {
             colorAnim.setEvaluator(ArgbEvaluator())
             colorAnim.start()
         }.withStartAction {
+            mediaPlayer = MediaPlayer.create(requireContext(), R.raw.winter_song)
+            mediaPlayer.start()
             image.setImageResource(R.drawable.winter)
             image.startAnimation(AnimationUtils.loadAnimation(requireContext(), R.anim.fade_in))
 
         }.withEndAction {
+            mediaPlayer.stop()
+
             image.startAnimation(AnimationUtils.loadAnimation(requireContext(), R.anim.fade_out))
 
             springTime(image,bg)
