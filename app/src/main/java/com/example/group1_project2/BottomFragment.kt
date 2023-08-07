@@ -133,3 +133,5 @@ class BottomFragment: Fragment(R.layout.bottom_segment) {
     }
 
 }
+
+//pushed
