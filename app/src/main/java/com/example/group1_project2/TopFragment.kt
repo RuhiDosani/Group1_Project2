@@ -5,6 +5,7 @@ import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
@@ -17,6 +18,15 @@ import androidx.vectordrawable.graphics.drawable.ArgbEvaluator
 class TopFragment : Fragment(R.layout.top_segment) {
     private var animView : View? = null
     private var ANIMATION_DURATION = 2000
+    var mCallback: ButtoClickedListener? = null
+    interface ButtoClickedListener {
+        fun setStatus(status: Boolean)
+    }
+
+    fun setOnButtoClickedListener(callback: ButtoClickedListener) {
+        this.mCallback = callback
+    }
+
     @SuppressLint("ObjectAnimatorBinding", "RestrictedApi")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -45,5 +55,16 @@ class TopFragment : Fragment(R.layout.top_segment) {
         colorAnim.repeatMode = ValueAnimator.REVERSE
         colorAnim.setEvaluator(ArgbEvaluator())
         colorAnim.start()
+
+        val startButton:Button = view.findViewById(R.id.start_button)
+        val stopButton:Button = view.findViewById(R.id.stop_button)
+
+        startButton.setOnClickListener(){
+            mCallback?.setStatus(true)
+        }
+
+        stopButton.setOnClickListener() {
+            mCallback?.setStatus(false)
+        }
     }
 }

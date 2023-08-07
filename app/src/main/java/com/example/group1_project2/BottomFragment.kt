@@ -16,6 +16,7 @@ import androidx.vectordrawable.graphics.drawable.ArgbEvaluator
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import android.media.MediaPlayer
+import android.util.Log
 
 
 class BottomFragment: Fragment(R.layout.bottom_segment) {
@@ -32,6 +33,10 @@ class BottomFragment: Fragment(R.layout.bottom_segment) {
         wheelImageView.startAnimation(animImg2)
 
         springTime(imageWeather, bottomBackground)
+    }
+
+    fun updateStatus(status: Boolean) {
+        Log.d("STATUS",status.toString())
     }
 
 
@@ -157,7 +162,4 @@ class BottomFragment: Fragment(R.layout.bottom_segment) {
             springTime(image,bg)
         }.start()
     }
-
 }
-
-//pushed
