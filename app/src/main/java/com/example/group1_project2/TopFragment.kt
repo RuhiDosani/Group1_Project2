@@ -33,7 +33,6 @@ class TopFragment : Fragment(R.layout.top_segment) {
         cloudImageView.startAnimation(animCloud)
         sunImageView.startAnimation(animSun)
 
-
         animView = view.findViewById(R.id.topBackground)
 
         val colorAnim: ValueAnimator = ObjectAnimator.ofInt(
