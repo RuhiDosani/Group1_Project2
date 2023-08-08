@@ -28,4 +28,9 @@ class MainActivity : AppCompatActivity(), TopFragment.ButtoClickedListener {
         //calling the updateText method of the FragmentB
         callingFragment.updateStatus(status)
     }
+
+    override fun setAnimate(animation: Int) {
+        val callingFragment = supportFragmentManager.findFragmentById(R.id.bottom_fragment_container) as BottomFragment
+        callingFragment.updateAnimate(animation)
+    }
 }

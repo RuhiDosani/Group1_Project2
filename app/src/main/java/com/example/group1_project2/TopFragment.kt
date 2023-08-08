@@ -5,27 +5,60 @@ import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.view.animation.AnimationUtils
+import android.widget.Button
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
-import androidx.appcompat.app.AppCompatActivity
-import android.view.animation.Animation
-import android.widget.Button
 import androidx.vectordrawable.graphics.drawable.ArgbEvaluator
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.NonCancellable
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+
 
 class TopFragment : Fragment(R.layout.top_segment) {
     private var animView : View? = null
     private var ANIMATION_DURATION = 2000
     var mCallback: ButtoClickedListener? = null
+    var seasonIndex: Int = 0
+    val scope = MainScope() // could also use an other scope such as viewModelScope if available
+    var job: Job? = null
+
     interface ButtoClickedListener {
         fun setStatus(status: Boolean)
+        fun setAnimate(animation: Int)
     }
 
     fun setOnButtoClickedListener(callback: ButtoClickedListener) {
         this.mCallback = callback
     }
+
+    fun startUpdates() {
+        job = scope.launch {
+            while(true) {
+                mCallback?.setAnimate(seasonIndex)
+                seasonIndex += 1
+                Log.d("Top-fragment", seasonIndex.toString())
+                if(seasonIndex==4) {
+                    seasonIndex = 0
+                }
+                delay(15000)
+            }
+        }
+    }
+
+    private fun stopUpdates() {
+        job?.cancel()
+        job = null
+    }
+
 
     @SuppressLint("ObjectAnimatorBinding", "RestrictedApi")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -59,12 +92,18 @@ class TopFragment : Fragment(R.layout.top_segment) {
         val startButton:Button = view.findViewById(R.id.start_button)
         val stopButton:Button = view.findViewById(R.id.stop_button)
 
+        startUpdates()
+
         startButton.setOnClickListener(){
+            seasonIndex = 0
+            startUpdates()
             mCallback?.setStatus(true)
         }
 
         stopButton.setOnClickListener() {
+            stopUpdates()
             mCallback?.setStatus(false)
         }
     }
 }
+

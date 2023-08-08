@@ -13,11 +13,15 @@ import androidx.fragment.app.Fragment
 import androidx.vectordrawable.graphics.drawable.ArgbEvaluator
 import android.media.MediaPlayer
 import android.util.Log
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import com.example.group1_project2.databinding.BottomSegmentBinding
 
 class BottomFragment : Fragment(R.layout.bottom_segment) {
-    private lateinit var mediaPlayer: MediaPlayer
+    private var mediaPlayer: MediaPlayer? = null
     private lateinit var currentAnimator: ValueAnimator
-    private var currentSeasonIndex = 0
+    private var _binding: BottomSegmentBinding? = null
+    private val binding get() = _binding!!
 
     private data class Season(
         val imageRes: Int,
@@ -56,52 +60,83 @@ class BottomFragment : Fragment(R.layout.bottom_segment) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val wheelImageView: ImageView = view.findViewById(R.id.wheel_image)
-        val bottomBackground: View = view.findViewById(R.id.bottom_background)
-        val imageWeather: ImageView = view.findViewById(R.id.image_weather)
 
         val animImg2 = AnimationUtils.loadAnimation(requireContext(), R.anim.rotate)
-        wheelImageView.startAnimation(animImg2)
+        binding.wheelImage.startAnimation(animImg2)
 
-        startSeasonAnimation(imageWeather, bottomBackground)
+
+
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        _binding = BottomSegmentBinding.inflate(inflater, container, false)
+        val view = binding.root
+        return view
     }
 
     fun updateStatus(status: Boolean) {
         if (status) {
-            currentAnimator.start()
+            stopMediaPlayer()
+            currentAnimator.cancel()
+            startSeasonAnimation(0)
         } else {
+            stopMediaPlayer()
             currentAnimator.pause()
         }
     }
 
+    fun updateAnimate(animation: Int) {
+        stopMediaPlayer()
+        startSeasonAnimation(animation)
+    }
+
+    fun stopMediaPlayer() {
+        if(mediaPlayer?.isPlaying == true){
+            mediaPlayer?.stop()
+        }
+    }
+
     @SuppressLint("RestrictedApi", "WrongConstant")
-    private fun startSeasonAnimation(image: ImageView, bg: View) {
-        val currentSeason = seasons[currentSeasonIndex]
+    private fun startSeasonAnimation(index: Int) {
+        val currentSeason = seasons[index]
+        Log.d("TAG-index", index.toString())
+
+        mediaPlayer = MediaPlayer.create(requireContext(), currentSeason.songRes)
+
+        if(mediaPlayer?.isPlaying == true){
+            mediaPlayer?.stop()
+        } else {
+            mediaPlayer?.start()
+        }
+
+
         currentAnimator = ObjectAnimator.ofInt(
-            bg, "backgroundColor", currentSeason.startColor, currentSeason.endColor
+            binding.bottomBackground, "backgroundColor", currentSeason.startColor, currentSeason.endColor
         ).apply {
             duration = 15000
             repeatCount = ValueAnimator.INFINITE
-            repeatMode = ValueAnimator.REVERSE
             setEvaluator(ArgbEvaluator())
             addUpdateListener {
-                bg.setBackgroundColor(it.animatedValue as Int)
+                binding.bottomBackground.setBackgroundColor(it.animatedValue as Int)
             }
-            start()
+                start()
         }
 
-        mediaPlayer = MediaPlayer.create(requireContext(), currentSeason.songRes)
-        mediaPlayer.start()
-        image.setImageResource(currentSeason.imageRes)
-        image.startAnimation(AnimationUtils.loadAnimation(requireContext(), R.anim.fade_in))
+
+        binding.imageWeather.setImageResource(currentSeason.imageRes)
+        binding.imageWeather.startAnimation(AnimationUtils.loadAnimation(requireContext(), R.anim.fade_in))
 
         currentAnimator.addPauseListener(object : Animator.AnimatorPauseListener {
             override fun onAnimationPause(animation: Animator) {
-                mediaPlayer.pause()
+               // mediaPlayer?.pause()
             }
 
             override fun onAnimationResume(animation: Animator) {
-                mediaPlayer.start()
+               // mediaPlayer?.start()
             }
         })
     }
