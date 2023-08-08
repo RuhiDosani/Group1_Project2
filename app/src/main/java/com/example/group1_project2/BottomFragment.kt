@@ -64,8 +64,6 @@ class BottomFragment : Fragment(R.layout.bottom_segment) {
         val animImg2 = AnimationUtils.loadAnimation(requireContext(), R.anim.rotate)
         binding.wheelImage.startAnimation(animImg2)
 
-
-
     }
 
     override fun onCreateView(
@@ -80,6 +78,8 @@ class BottomFragment : Fragment(R.layout.bottom_segment) {
 
     fun updateStatus(status: Boolean) {
         if (status) {
+            val animImg2 = AnimationUtils.loadAnimation(requireContext(), R.anim.rotate)
+            binding.wheelImage.startAnimation(animImg2)
             stopMediaPlayer()
             currentAnimator.cancel()
             startSeasonAnimation(0)
