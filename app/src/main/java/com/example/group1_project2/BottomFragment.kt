@@ -86,6 +86,7 @@ class BottomFragment : Fragment(R.layout.bottom_segment) {
         } else {
             stopMediaPlayer()
             currentAnimator.pause()
+            binding.wheelImage.clearAnimation()
         }
     }
 
@@ -125,8 +126,6 @@ class BottomFragment : Fragment(R.layout.bottom_segment) {
             }
                 start()
         }
-
-
         binding.imageWeather.setImageResource(currentSeason.imageRes)
         binding.imageWeather.startAnimation(AnimationUtils.loadAnimation(requireContext(), R.anim.fade_in))
 
